@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Domain\Product\Job;
 
+use Domain\Common\DomainException;
 use Domain\Product\Port\ProductRepository;
 use Domain\Product\StyleNumber;
 use Domain\Product\SyncStatus;
-use DomainException;
 
 final class MarkProductAsSynced
 {
