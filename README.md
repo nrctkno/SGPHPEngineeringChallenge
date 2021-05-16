@@ -139,7 +139,7 @@ Here's an example:
 
 - The style number of the product is the unique identifier
 - This import will be an upsert process, if no product exists at the style number, we do an insert, otherwise, we modify the content and update.
-- Products that are newly created or have received changed since their last update should be in a special state that represents that they need to be synced to the marketing partner integration.
+- Products that are newly created or have received changes since their last update should be in a special state that represents that they need to be synced to the marketing partner integration.
 - If a product is being updated, and there were no changes to the product, then the product should NOT go into a state that will sync to the marketing partner.
 - Do not assume all prices will be in USD, but it's fine to allow your code to only handle USD and report errors otherwise.
 

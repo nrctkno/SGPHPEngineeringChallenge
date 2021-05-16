@@ -6,12 +6,11 @@ namespace Domain\Product\Port;
 
 use Domain\Product\Product;
 use Domain\Product\StyleNumber;
-use Domain\Product\SyncStatus;
 
 interface ProductRepository
 {
 
-    function createProduct(Product $product, SyncStatus $satus);
+    function createProduct(Product $product);
 
     function updateProduct(Product $product);
 

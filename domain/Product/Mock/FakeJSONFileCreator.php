@@ -8,6 +8,7 @@ use Domain\Product\Price;
 use Domain\Product\Product;
 use Domain\Product\Serializer\ProductJsonSerializer;
 use Domain\Product\StyleNumber;
+use Domain\Product\SyncStatus;
 
 class FakeJSONFileCreator
 {
@@ -26,7 +27,8 @@ class FakeJSONFileCreator
                     self::styleNumber(),
                     self::name(),
                     self::price(),
-                    self::images()
+                    self::images(),
+                    SyncStatus::undefined()
                 )
             );
         }
