@@ -181,7 +181,8 @@ ABC|123,"T-Shirt",$150,"https://via.placeholder.com/400x300/4b0082?id=1","https:
 You'll need to enable the PHP intl extension.
 
 1. Run `composer install`
-2. Run `php bin/console doctrine:migrations:migrate`
+2. php bin/console doctrine:database:create
+3. Run `php bin/console doctrine:migrations:migrate`
 
 The project uses a SQLite database. To verify that the tables have been successfully created, run:
 ```php bin/console dbal:run-sql "SELECT name FROM sqlite_master WHERE type='table';"```
