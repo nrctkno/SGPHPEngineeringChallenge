@@ -221,7 +221,7 @@ Finally, to export the _imported_ products (the new or updated ones), run:
 
 ```php bin/console app:productsexport:imported```
 
-A file called `imported.csv` will be created in the /data folder, as suggested in the requirements.
+A file called `./data/imported.csv` will be created, as suggested in the requirements.
 
 
 ### Considerations
