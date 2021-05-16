@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Domain\Product\Price;
+use Domain\Product\Product as DomainProduct;
+use Domain\Product\StyleNumber;
+use Domain\Product\SyncStatus;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -12,9 +16,9 @@ class Product
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(type="string, length=7")
+     * @ORM\Column(type="string", length=7)
      */
-    private $id;
+    private $style_number;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -39,16 +43,52 @@ class Product
     /**
      * @ORM\Column(type="string", length=1)
      */
-    private $sync_status;
+    private $status;
 
-    public function getId(): string
+    public static function fromDomain(DomainProduct $p): Product
     {
-        return $this->id;
+        $entity = new static();
+        $entity->setStyleNumber($p->getStyleNumber()->__toString());
+        $entity->setName($p->getName());
+        $entity->setCurrency($p->getPrice()->getCurrency());
+        $entity->setAmount($p->getPrice()->getAmount());
+        $entity->setImages($p->getImages());
+        $entity->setStatus($p->getStatus());
+
+        return $entity;
     }
+
+    public function toDomain(): DomainProduct
+    {
+        return new DomainProduct(
+            new StyleNumber($this->style_number),
+            $this->name,
+            new Price($this->amount, $this->currency),
+            $this->getImages(),
+            new SyncStatus($this->status)
+        );
+    }
+
+
+    public function getStyleNumber(): string
+    {
+        return $this->style_number;
+    }
+
+    public function setStyleNumber(string $style_number): void
+    {
+        $this->style_number = $style_number;
+    }
+
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getCurrency(): string
@@ -56,18 +96,38 @@ class Product
         return $this->currency;
     }
 
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
+    }
+
     public function getAmount(): int
     {
         return $this->amount;
     }
 
-    public function getImages(): int
+    public function setAmount(int $amount): void
     {
-        return $this->images;
+        $this->amount = $amount;
     }
 
-    public function getSyncStatus(): string
+    public function getImages(): array
     {
-        return $this->sync_status;
+        return json_decode($this->images);
+    }
+
+    public function setImages(array $images): void
+    {
+        $this->images = json_encode($images);
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
     }
 }

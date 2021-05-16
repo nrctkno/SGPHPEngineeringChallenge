@@ -11,10 +11,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class CreateFakeProductsFileCommand extends Command
+class ProductsFileCreateCommand extends Command
 {
 
-    protected static $defaultName = 'app:create-fake-products-file';
+    protected static $defaultName = 'app:productsfile:create';
 
     private MessageBusInterface $bus;
 
@@ -28,10 +28,9 @@ class CreateFakeProductsFileCommand extends Command
     {
         $this
             ->setDescription('Creates a new fake products file in json format.')
-            ->setHelp('Example: php bin/console php bin/console app:create-fake-products-file 5000 data/products.json')
+            ->setHelp('Example: php bin/console app:productsfile:create 5000 data/products.json')
             ->addArgument('count', InputArgument::REQUIRED, 'The number of records to create.')
             ->addArgument('path', InputArgument::REQUIRED, 'The path for the output file.')
-            ->addOption('no-process', 'np', InputOption::VALUE_OPTIONAL, 'When the command should not subscribe the file to be processed.', false)
             ;
     }
 
@@ -39,17 +38,11 @@ class CreateFakeProductsFileCommand extends Command
     {
         $count = $input->getArgument('count');
         $path = $input->getArgument('path');
-        $no_process = $input->getOption('no-process');
 
         try {
             FakeJSONFileCreator::create($path, $count);
 
             $output->writeln($count . ' records created in "' . $path . '".');
-
-            if ($no_process === false) {
-                $this->bus->dispatch(new SplitProductsFile($path));
-                $output->writeln('File was dispatched to process.');
-            }
 
             return Command::SUCCESS;
         } catch (\Exception $e) {

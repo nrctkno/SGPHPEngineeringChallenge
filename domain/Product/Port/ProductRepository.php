@@ -10,9 +10,9 @@ use Domain\Product\StyleNumber;
 interface ProductRepository
 {
 
-    function createProduct(Product $product);
+    function createProduct(Product $product): void;
 
-    function updateProduct(Product $product);
+    function updateProduct(Product $product): void;
 
     function getProduct(StyleNumber $number): ?Product;
 }

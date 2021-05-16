@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use Domain\Product\Port\ProductReader;
 use Domain\Product\Port\ProductRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,11 +13,13 @@ class ExportImportedProductsToSFTP extends Command
 
     protected static $defaultName = 'app:export-imported-products-to-sftp';
 
-    private ProductRepository $reader;
+    private ProductReader $reader;
+    private ProductRepository $repository;
 
-    function __construct(ProductRepository $reader)
+    function __construct(ProductReader $reader, ProductRepository $repository)
     {
         $this->reader = $reader;
+        $this->repository = $repository;
 
         parent::__construct();
     }

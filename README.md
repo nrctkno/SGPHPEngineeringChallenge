@@ -180,30 +180,47 @@ ABC|123,"T-Shirt",$150,"https://via.placeholder.com/400x300/4b0082?id=1","https:
 
 You'll need to enable the PHP intl extension.
 
-Run `composer install`
+1. Run `composer install`
+2. Run `php bin/console doctrine:migrations:migrate`
 
 
 ## Usage
 
-First, start some workers: open as many prompts as message workers you want to start, running:
-`php bin/console messenger:consume async -vv`
+Create a fake products file, running:
 
-	Note: In a production environment this can be automated using a process manager like supervisor.
+```php bin/console app:productsfile:create 50000 data/products.json```
 
-Then create a fake products file, running:
+A new products file has been created at data/products.json.
 
-```php bin/console app:create-fake-products-file 50000 data/input/products.json```
+---
 
-This command will also start the splitting process immediately. You will see in the `/data` folder the creation and removal of the processed files.
-If you want to create the file and inspect it, you can also add the `--no-process` option:
+Now start some workers: open as many prompts as message workers you want to start, and run:
 
-```php bin/console app:create-fake-products-file 50000 data/input/products.json --no-process```
+```php bin/console messenger:consume async -vv```
+
+	Note: In a production environment this should be automated using a process manager like supervisor.
+
+---
+
+Then, send the created file to the process queue, running:
+
+```php bin/console app:productsfile:enqueue data/products.json```
+
+This command will start the splitting process immediately. You will see in the `/data` folder the creation and removal of the processed files.
+
+After the execution, you can verify the created products by running:
+
+```php bin/console dbal:run-sql "SELECT * FROM product;"```
+
+---
 
 Finally, to export the _imported_ products (the new or updated ones), run:
 
-```php bin/console app:export-imported-products-to-sftp```
+```
+php bin/console app:export-imported-products-to-sftp
+```
 
-A file called `export.csv` will be created in the /data folder.
+A file called `export.csv` will be created in the /data folder, as suggested in the requirements.
 
 
 ### Considerations
@@ -212,9 +229,15 @@ A file called `export.csv` will be created in the /data folder.
 
 - Dependency injection and autowiring: you will find how interfaces (ports) are replaced by their implementations (adapters) in the `config/services.yaml` file.
 
+- Command and Query Separation (CQS): domain enttities operations are implemented in _repositories_, and reading ones (i.e. lists) in _readers_.
+
 - _Amount price_ is an integer: although most prices are expressed with 2 or 3 decimals, the `Price` model accepts an int value to follow the provided example.
 
 
 ## Testing
 
-TODO
+Run:
+
+```
+php ./vendor/bin/phpunit
+```
