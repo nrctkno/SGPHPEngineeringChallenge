@@ -183,6 +183,8 @@ You'll need to enable the PHP intl extension.
 1. Run `composer install`
 2. Run `php bin/console doctrine:migrations:migrate`
 
+The project uses a SQLite database. To verify that the tables have been successfully created, run:
+```php bin/console dbal:run-sql "SELECT name FROM sqlite_master WHERE type='table';"```
 
 ## Usage
 

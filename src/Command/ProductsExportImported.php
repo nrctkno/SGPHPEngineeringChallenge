@@ -49,12 +49,16 @@ class ProductsExportImported extends Command
         foreach ($imported_products as $entity) {
             $id = $entity->getStyleNumber();
 
-            $writer->insertOne([
-                $id,
-                $entity->getName(),
-                '$ ' . $entity->getAmount(),
-                join(',', $entity->getImages())
-            ]);
+            $rows = array_merge(
+                [
+                    $id,
+                    $entity->getName(),
+                    '$' . $entity->getAmount()
+                ],
+                $entity->getImages()
+            );
+
+            $writer->insertOne($rows);
 
             $this->mark_as_synced->__invoke(new StyleNumber($id));
         }
