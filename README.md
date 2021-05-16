@@ -187,9 +187,12 @@ You'll need to enable the PHP intl extension.
 The project uses a SQLite database. To verify that the tables have been successfully created, run:
 ```php bin/console dbal:run-sql "SELECT name FROM sqlite_master WHERE type='table';"```
 
+
 ## Usage
 
-Create a fake products file, running:
+### a. Create a fake products file
+
+Run:
 
 ```php bin/console app:productsfile:create 50000 data/products.json```
 
@@ -197,7 +200,9 @@ A new products file has been created at data/products.json.
 
 ---
 
-Now start some workers: open as many prompts as message workers you want to start, and run:
+### b. Start some workers
+
+Open as many prompts as message workers you want to start, and run:
 
 ```php bin/console messenger:consume async -vv```
 
@@ -205,17 +210,30 @@ Now start some workers: open as many prompts as message workers you want to star
 
 ---
 
-Then, send the created file to the process queue, running:
+### c1. Process the file via console:
+
+Send the created file to the process queue, running:
 
 ```php bin/console app:productsfile:enqueue data/products.json```
 
-This command will start the splitting process immediately. You will see in the `/data` folder the creation and removal of the processed files.
+
+### c2. Upload the file using the browser:
+
+Navigate to the root dir of your localhost, an upload form will be displayed.
+
+---
+
+### d. See it in action:
+
+This command or the file submission will start the splitting process immediately. You will see in the `/data` folder the creation and removal of the processed files.
 
 After the execution, you can verify the created products by running:
 
 ```php bin/console dbal:run-sql "SELECT * FROM product;"```
 
 ---
+
+### e. Export the new products to CSV
 
 Finally, to export the _imported_ products (the new or updated ones), run:
 
@@ -224,7 +242,7 @@ Finally, to export the _imported_ products (the new or updated ones), run:
 A file called `./data/imported.csv` will be created, as suggested in the requirements.
 
 
-### Considerations
+## Considerations
 
 - Screaming architecture / ports and adapters: you will see that the `domain` folder is in the root folder. The intention is to easily find where the business model is placed.
 

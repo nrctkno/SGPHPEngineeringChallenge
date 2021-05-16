@@ -1,3 +1,9 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+create_get:
+    path: /
+    controller: App\Controller\ImportFile\CreateController::_get
+    methods:    GET
+
+create_post:
+    path: /
+    controller: App\Controller\ImportFile\CreateController::_post
+    methods:    POST
