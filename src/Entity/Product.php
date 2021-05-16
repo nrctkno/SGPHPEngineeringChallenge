@@ -48,15 +48,22 @@ class Product
     public static function fromDomain(DomainProduct $p): Product
     {
         $entity = new static();
-        $entity->setStyleNumber($p->getStyleNumber()->__toString());
-        $entity->setName($p->getName());
-        $entity->setCurrency($p->getPrice()->getCurrency());
-        $entity->setAmount($p->getPrice()->getAmount());
-        $entity->setImages($p->getImages());
-        $entity->setStatus($p->getStatus());
 
-        return $entity;
+        return $entity->fillFromDomain($p);
     }
+
+    public function fillFromDomain(DomainProduct $p): Product
+    {
+        $this->setStyleNumber($p->getStyleNumber()->__toString());
+        $this->setName($p->getName());
+        $this->setCurrency($p->getPrice()->getCurrency());
+        $this->setAmount($p->getPrice()->getAmount());
+        $this->setImages($p->getImages());
+        $this->setStatus($p->getStatus());
+
+        return $this;
+    }
+
 
     public function toDomain(): DomainProduct
     {

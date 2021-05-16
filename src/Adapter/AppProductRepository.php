@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Domain\Product\Port\ProductRepository;
 use Domain\Product\Product;
 use Domain\Product\StyleNumber;
+use Exception;
 
 class AppProductRepository implements ProductRepository
 {
@@ -21,32 +22,34 @@ class AppProductRepository implements ProductRepository
 
     public function createProduct(Product $product): void
     {
-        $this->save($product);
+        $entity = EntityProduct::fromDomain($product);
+        $this->em->persist($entity);
+        $this->em->flush();
     }
 
     public function updateProduct(Product $product): void
     {
-        $this->save($product);
+        $entity = $this->getEntity($product->getStyleNumber()->__toString());
+
+        if (is_null($entity)) {
+            throw new Exception('Entity does not exist.');
+        }
+
+        $entity->fillFromDomain($product);
+
+        $this->em->persist($entity);
+        $this->em->flush();
     }
 
     public function getProduct(StyleNumber $number): ?Product
     {
-        $entity = $this->em->getRepository(EntityProduct::class)->find($number->__toString());
+        $entity = $this->getEntity($number->__toString());
 
         return is_null($entity) ? null : $entity->toDomain();
     }
 
-    /**
-     * Creates or updates a product.
-     * 
-     * Although Doctrine supports upsert operations, the domain must to implement the
-     * create and update operations atomically to support any infrastructure scenario.
-     */
-    private function save(Product $product): void
+    private function getEntity(string $id): ?EntityProduct
     {
-        $entity = EntityProduct::fromDomain($product);
-        $this->em->merge($entity);
-        $this->em->persist($entity);
-        $this->em->flush();
+        return $this->em->getRepository(EntityProduct::class)->find($id);
     }
 }
