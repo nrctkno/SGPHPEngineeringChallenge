@@ -36,10 +36,16 @@ class AppProductRepository implements ProductRepository
         return is_null($entity) ? null : $entity->toDomain();
     }
 
-
+    /**
+     * Creates or updates a product.
+     * 
+     * Although Doctrine supports upsert operations, the domain must to implement the
+     * create and update operations atomically to support any infrastructure scenario.
+     */
     private function save(Product $product): void
     {
         $entity = EntityProduct::fromDomain($product);
+        $this->em->merge($entity);
         $this->em->persist($entity);
         $this->em->flush();
     }

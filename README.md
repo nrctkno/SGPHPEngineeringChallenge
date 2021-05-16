@@ -216,9 +216,7 @@ After the execution, you can verify the created products by running:
 
 Finally, to export the _imported_ products (the new or updated ones), run:
 
-```
-php bin/console app:export-imported-products-to-sftp
-```
+```php bin/console app:productsexport:imported```
 
 A file called `export.csv` will be created in the /data folder, as suggested in the requirements.
 
