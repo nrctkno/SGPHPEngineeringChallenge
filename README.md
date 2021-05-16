@@ -218,12 +218,12 @@ Finally, to export the _imported_ products (the new or updated ones), run:
 
 ```php bin/console app:productsexport:imported```
 
-A file called `export.csv` will be created in the /data folder, as suggested in the requirements.
+A file called `imported.csv` will be created in the /data folder, as suggested in the requirements.
 
 
 ### Considerations
 
-- Screaming architecture: you will see that the `domain` folder is in the root folder. The intention is to easily find where the business model is placed.
+- Screaming architecture / ports and adapters: you will see that the `domain` folder is in the root folder. The intention is to easily find where the business model is placed.
 
 - Dependency injection and autowiring: you will find how interfaces (ports) are replaced by their implementations (adapters) in the `config/services.yaml` file.
 
