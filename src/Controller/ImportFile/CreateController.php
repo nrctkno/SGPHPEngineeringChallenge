@@ -32,8 +32,8 @@ class CreateController extends AbstractController
             return new Response("No file specified", Response::HTTP_UNPROCESSABLE_ENTITY, ['content-type' => 'text/plain']);
         }
 
-        $filename = $file->getClientOriginalName();
-        $upload_dir = __DIR__. '/../../data/';
+        $filename = uniqid('products_', true) . '.' . $file->getClientOriginalExtension();
+        $upload_dir = __DIR__ . '/../../../data/';
 
         try {
             $file->move($upload_dir, $filename);
