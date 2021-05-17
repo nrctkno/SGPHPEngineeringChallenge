@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Product\Mock;
+namespace App\Factory;
 
 use Domain\Product\Price;
 use Domain\Product\Product;
